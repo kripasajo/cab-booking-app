@@ -1,0 +1,24 @@
+server:
+  port: 8085
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: "com.rideflow.*"
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:rideflow-demo-secret-key-change-me-in-production-0123456789}
+  security:
+    public-paths: /ws/**
